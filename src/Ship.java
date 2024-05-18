@@ -4,7 +4,7 @@ class Ship extends Entity {
     }
 
     public void setPosition(int x, int y) {
-        gameSpace[positionX][positionX] = null;
+        gameSpace[positionX][positionY] = null;
         positionX = x;
         positionY = y;
         gameSpace[positionX][positionY] = this;
