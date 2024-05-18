@@ -1,37 +1,42 @@
+import entities.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
 abstract class GameEngine {
-    static protected Entity[][] gameSpace;
-    protected Ship ship = new Ship(-500, -500);
-    protected ArrayList<BulletMoving> bulletsList = new ArrayList<>();
-    protected ArrayList<Enemy> enemyList = new ArrayList<>();
+    static public Entity[][] gameSpace;
+    protected Ship ship;
+    protected ArrayList<BulletMoving> bulletsList;
+    protected ArrayList<Enemy> enemyList;
     static protected int gameSpaceWidth;
     static protected int gameSpaceHeight;
     protected int iterationCounter = 0;
 
     public GameEngine(int width, int height) {
+        gameSpaceWidth = width;
+        gameSpaceHeight = height;
         gameSpace = new Entity[width][height];
-        init(width, height);
+        ship = new Ship();
+        bulletsList = new ArrayList<>();
+        enemyList = new ArrayList<>();
+        init();
     }
 
-    abstract void view(); // SHOW ONLY NON ZERO HP OBJECTS
+    abstract void view();
 
     abstract void moveLeft();
 
     abstract void moveRight();
 
-    void init(int width, int height) {
-        gameSpaceWidth = width;
-        gameSpaceHeight = height;
-        ship.setPosition(width / 2, height - 1);
-        gameSpace[width / 2][height - 1] = ship;
+    void init() {
+        ship.setPosition(gameSpaceWidth / 2, gameSpaceHeight - 1);
+        gameSpace[gameSpaceWidth / 2][gameSpaceHeight - 1] = ship;
     }
 
     void iteration() {
         if (iterationCounter % 2 == 0) {
-            Enemy newEnemy = new Enemy((int) (Math.random() * gameSpaceWidth), 0);
+            Enemy newEnemy = new Enemy();
             enemyList.add(newEnemy);
             gameSpace[newEnemy.getPositionX()][0] = newEnemy;
         }
@@ -49,7 +54,7 @@ abstract class GameEngine {
                 gameSpace[newEnemyBullet.getPositionX()][newEnemyBullet.getPositionY()] = newEnemyBullet;
             });
         }
-        //  ship.moveEntity((Entity) bullet, bullet.getPositionX(), bullet.getPositionY());
+
         bulletsList.forEach(BulletMoving::move);
         checkForBulletsCollision();
         iterationCounter++;
@@ -105,15 +110,21 @@ class SpaceInvadersConsole extends GameEngine {
 
     @Override
     void moveLeft() {
-        if (ship.getPositionX() > 0) {
-            ship.setPosition(ship.getPositionX() - 1, ship.getPositionY());
+        int shipX = ship.getPositionX();
+        if (shipX > 0) {
+            gameSpace[shipX][ship.getPositionY()] = null;
+            ship.setPosition(shipX - 1, ship.getPositionY());
+            gameSpace[ship.getPositionX()][ship.getPositionY()] = ship;
         }
     }
 
     @Override
     void moveRight() {
-        if (ship.getPositionX() < gameSpaceWidth - 1) {
-            ship.setPosition(ship.getPositionX() + 1, ship.getPositionY());
+        int shipX = ship.getPositionX();
+        if (shipX < gameSpaceWidth - 1) {
+            gameSpace[shipX][ship.getPositionY()] = null;
+            ship.setPosition(shipX + 1, ship.getPositionY());
+            gameSpace[ship.getPositionX()][ship.getPositionY()] = ship;
         }
     }
 
@@ -156,96 +167,3 @@ public class Main {
     }
 }
 
-abstract class Entity {
-    protected int healthPoints;
-    protected int positionX;
-    protected int positionY;
-
-    public Entity(int healthPoints, int positionX, int positionY) {
-        this.healthPoints = healthPoints;
-        this.positionX = positionX;
-        this.positionY = positionY;
-    }
-
-    public void setHealthPoints(int healthPoints) {
-        this.healthPoints = healthPoints;
-    }
-
-    public int getHealthPoints() {
-        return healthPoints;
-    }
-
-    public int getPositionX() {
-        return positionX;
-    }
-
-    public int getPositionY() {
-        return positionY;
-    }
-
-    public void setPosition(int x, int y) {
-        positionX = x;
-        positionY = y;
-    }
-
-    void moveEntity(Entity entity, int newX, int newY) {
-        int oldX = entity.getPositionX();
-        int oldY = entity.getPositionY();
-        GameEngine.gameSpace[oldX][oldY] = null;
-        if (entity.positionY != newY || entity.positionX != newX) entity.setPosition(newX, newY);
-        GameEngine.gameSpace[newX][newY] = entity;
-    }
-}
-
-interface BulletMoving {
-    void move();
-
-    int getPositionX();
-
-    int getPositionY();
-}
-
-class ShipBullet extends Entity implements BulletMoving {
-    public ShipBullet(int positionX, int positionY) {
-        super(1, positionX, positionY);
-    }
-
-    @Override
-    public void move() {
-        if (positionY > 0) positionY--;
-        moveEntity(this, positionX, positionY);
-    }
-}
-
-class Ship extends Entity {
-    public Ship(int positionX, int positionY) {
-        super(5, positionX, positionY);
-    }
-
-    public void setPosition(int x, int y) {
-        positionX = x;
-        positionY = y;
-
-    }
-}
-
-class EnemyBullet extends Entity implements BulletMoving {
-    public EnemyBullet(int positionX, int positionY) {
-        super(1, positionX, positionY);
-    }
-
-    @Override
-    public void move() {
-//        if (positionY < GameEngine.gameSpaceHeight - 1) positionY++;
-//        moveEntity(this, positionX, positionY);
-         GameEngine.gameSpace[positionX][positionY+1] = GameEngine.gameSpace[positionX][positionY];
-        GameEngine.gameSpace[positionX][positionY] = null;
-       // positionY = positionY + 1;
-    }
-}
-
-class Enemy extends Entity {
-    public Enemy(int positionX, int positionY) {
-        super(2, positionX, positionY);
-    }
-}
