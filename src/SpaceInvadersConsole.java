@@ -13,15 +13,33 @@ class SpaceInvadersConsole extends GameEngine {
                     System.out.print("S ");
                 } else if (entity instanceof Enemy) {
                     System.out.print("E ");
-                } else if (entity instanceof BulletMoving) {
+                } else if (entity instanceof EnemyBullet) {
                     System.out.print("| ");
-                } else {
+                }else if (entity instanceof ShipBullet) {
+                    System.out.print("|| ");
+                }
+                else {
                     System.out.print(". ");
                 }
             }
             System.out.println();
         }
         System.out.println("-----------");
+
+
+//        for (int height = 0; height < gameSpaceHeight; height++) {
+//            for (int width = 0; width < gameSpaceWidth; width++) {
+//                Entity entity = gameSpace[width][height];
+//                if (entity != null) {
+//                    System.out.print("X ");
+//                } else {
+//                    System.out.print(". ");
+//                }
+//            }
+//            System.out.println();
+//        }
+//
+//        System.out.println("-----------");
     }
 
     @Override

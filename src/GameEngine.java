@@ -61,7 +61,7 @@ abstract class GameEngine {
             BulletMoving bullet = iterator.next();
             int bulletX = bullet.getPositionX();
             int bulletY = bullet.getPositionY();
-            if (bulletY >= 0 && bulletY < gameSpaceHeight && gameSpace[bulletX][bulletY] != null) {
+            if (bulletY == 0 && bulletY == (gameSpaceHeight - 1) && gameSpace[bulletX][bulletY] != null) {  // bulletY >= 0 && bulletY < gameSpaceHeight && gameSpace[bulletX][bulletY] != null
                 Entity currentEntity = gameSpace[bulletX][bulletY];
                 currentEntity.setHealthPoints(currentEntity.getHealthPoints() - 1);
                 if (currentEntity.getHealthPoints() <= 0) {
