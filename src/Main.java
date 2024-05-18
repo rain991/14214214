@@ -3,12 +3,12 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 abstract class GameEngine {
-    protected Entity[][] gameSpace;
+    static protected Entity[][] gameSpace;
     protected Ship ship = new Ship(-500, -500);
     protected ArrayList<BulletMoving> bulletsList = new ArrayList<>();
     protected ArrayList<Enemy> enemyList = new ArrayList<>();
-    protected int gameSpaceWidth;
-    protected int gameSpaceHeight;
+    static protected int gameSpaceWidth;
+    static protected int gameSpaceHeight;
     protected int iterationCounter = 0;
 
     public GameEngine(int width, int height) {
@@ -25,7 +25,7 @@ abstract class GameEngine {
     void init(int width, int height) {
         gameSpaceWidth = width;
         gameSpaceHeight = height;
-        ship.setPosition(width / 2, height - 1); // Ship starts at max possible height
+        ship.setPosition(width / 2, height - 1);
         gameSpace[width / 2][height - 1] = ship;
     }
 
@@ -49,8 +49,8 @@ abstract class GameEngine {
                 gameSpace[newEnemyBullet.getPositionX()][newEnemyBullet.getPositionY()] = newEnemyBullet;
             });
         }
-
-        bulletsList.forEach((BulletMoving::move));
+        //  ship.moveEntity((Entity) bullet, bullet.getPositionX(), bullet.getPositionY());
+        bulletsList.forEach(BulletMoving::move);
         checkForBulletsCollision();
         iterationCounter++;
     }
@@ -71,7 +71,7 @@ abstract class GameEngine {
                         System.exit(0);
                     }
                 }
-                iterator.remove(); // Remove the bullet from the list
+                iterator.remove();
             }
         }
     }
@@ -84,6 +84,7 @@ class SpaceInvadersConsole extends GameEngine {
 
     @Override
     void view() {
+        clearConsole();
         for (int height = 0; height < gameSpaceHeight; height++) {
             for (int width = 0; width < gameSpaceWidth; width++) {
                 Entity entity = gameSpace[width][height];
@@ -115,20 +116,21 @@ class SpaceInvadersConsole extends GameEngine {
             ship.setPosition(ship.getPositionX() + 1, ship.getPositionY());
         }
     }
+
+    private void clearConsole() {
+        for (int i = 0; i < 7; i++) {
+            System.out.println();
+        }
+    }
 }
 
 public class Main {
     public static void main(String[] args) {
         SpaceInvadersConsole gameEngine = new SpaceInvadersConsole(20, 20);
-        while (true) {
-            gameEngine.iteration();
-            gameEngine.view();
-
+        Thread userInputThread = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             char userInput;
-            System.out.println("Welcome to Space Invaders!");
             while (true) {
-                System.out.println("Press 'A' to move left, 'D' to move right, or 'Q' to quit:");
                 userInput = scanner.next().charAt(0);
                 switch (Character.toUpperCase(userInput)) {
                     case 'A' -> gameEngine.moveLeft();
@@ -139,7 +141,16 @@ public class Main {
                         System.exit(0);
                     }
                 }
-                gameEngine.view();
+            }
+        });
+        userInputThread.start(); // Start the thread
+        while (true) {
+            gameEngine.iteration();
+            gameEngine.view();
+            try {
+                Thread.sleep(2000); // Delay for 1.5 seconds
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -171,11 +182,26 @@ abstract class Entity {
     public int getPositionY() {
         return positionY;
     }
+
+    public void setPosition(int x, int y) {
+        positionX = x;
+        positionY = y;
+    }
+
+    void moveEntity(Entity entity, int newX, int newY) {
+        int oldX = entity.getPositionX();
+        int oldY = entity.getPositionY();
+        GameEngine.gameSpace[oldX][oldY] = null;
+        if (entity.positionY != newY || entity.positionX != newX) entity.setPosition(newX, newY);
+        GameEngine.gameSpace[newX][newY] = entity;
+    }
 }
 
 interface BulletMoving {
     void move();
+
     int getPositionX();
+
     int getPositionY();
 }
 
@@ -186,7 +212,8 @@ class ShipBullet extends Entity implements BulletMoving {
 
     @Override
     public void move() {
-        positionY--;
+        if (positionY > 0) positionY--;
+        moveEntity(this, positionX, positionY);
     }
 }
 
@@ -198,6 +225,7 @@ class Ship extends Entity {
     public void setPosition(int x, int y) {
         positionX = x;
         positionY = y;
+
     }
 }
 
@@ -208,7 +236,11 @@ class EnemyBullet extends Entity implements BulletMoving {
 
     @Override
     public void move() {
-        positionY++;
+//        if (positionY < GameEngine.gameSpaceHeight - 1) positionY++;
+//        moveEntity(this, positionX, positionY);
+         GameEngine.gameSpace[positionX][positionY+1] = GameEngine.gameSpace[positionX][positionY];
+        GameEngine.gameSpace[positionX][positionY] = null;
+       // positionY = positionY + 1;
     }
 }
 
