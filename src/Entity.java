@@ -4,14 +4,17 @@ abstract class Entity {
     protected int healthPoints;
     protected int positionX;
     protected int positionY;
+    protected int gameSpaceHeight;
     protected Entity[][] gameSpace;
 
 
-    public Entity(int healthPoints, int positionX, int positionY, Entity[][] gameSpace) {
+    public Entity(int healthPoints, int positionX, int positionY,int gameSpaceHeight, Entity[][] gameSpace) {
         this.healthPoints = healthPoints;
         this.positionX = positionX;
         this.positionY = positionY;
+        this.gameSpaceHeight =gameSpaceHeight;
         this.gameSpace = gameSpace;
+
     }
 
     public void setHealthPoints(int healthPoints) {

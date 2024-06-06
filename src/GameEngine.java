@@ -11,7 +11,7 @@ abstract class GameEngine {
 
     public GameEngine(int width, int height) {
         this.gameSpace = new Entity[width][height];
-        this.ship = new Ship(0, 0, this.gameSpace);
+        this.ship = new Ship(0, 0, gameSpaceHeight, this.gameSpace);
         init(width, height);
     }
 
@@ -30,12 +30,12 @@ abstract class GameEngine {
 
     void iteration() {
         if (iterationCounter % 2 == 0) {
-            Enemy newEnemy = new Enemy((int) (Math.random() * gameSpaceWidth), 0, gameSpace);
+            Enemy newEnemy = new Enemy((int) (Math.random() * gameSpaceWidth), 0, gameSpaceHeight, gameSpace);
             gameSpace[newEnemy.getPositionX()][0] = newEnemy;
         }
 
         if (iterationCounter % 2 == 0) {
-            ShipBullet newShipBullet = new ShipBullet(ship.getPositionX(), ship.getPositionY() - 1, gameSpace);
+            ShipBullet newShipBullet = new ShipBullet(ship.getPositionX(), ship.getPositionY() - 1, gameSpaceHeight, gameSpace);
             bulletsList.add(newShipBullet);
             gameSpace[newShipBullet.getPositionX()][newShipBullet.getPositionY()] = newShipBullet;
         }
@@ -43,7 +43,7 @@ abstract class GameEngine {
         if (iterationCounter % 4 == 0) {
             for (int i = 0; i < gameSpaceWidth; i++) {
                 if (gameSpace[i][0] != null) {
-                    EnemyBullet newEnemyBullet = new EnemyBullet(i, 1, gameSpace);
+                    EnemyBullet newEnemyBullet = new EnemyBullet(i, 1, gameSpaceHeight, gameSpace);
                     bulletsList.add(newEnemyBullet);
                     gameSpace[newEnemyBullet.getPositionX()][newEnemyBullet.getPositionY()] = newEnemyBullet;
                 }

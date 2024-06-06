@@ -1,6 +1,6 @@
 class Ship extends Entity {
-    public Ship(int positionX, int positionY, Entity[][] gameSpace) {
-        super(5, positionX, positionY, gameSpace);
+    public Ship(int positionX, int positionY, int gameSpaceHeight, Entity[][] gameSpace) {
+        super(5, positionX, positionY, gameSpaceHeight, gameSpace);
     }
 
     public void setPosition(int x, int y) {

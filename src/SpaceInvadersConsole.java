@@ -25,21 +25,6 @@ class SpaceInvadersConsole extends GameEngine {
             System.out.println();
         }
         System.out.println("-----------");
-
-
-//        for (int height = 0; height < gameSpaceHeight; height++) {
-//            for (int width = 0; width < gameSpaceWidth; width++) {
-//                Entity entity = gameSpace[width][height];
-//                if (entity != null) {
-//                    System.out.print("X ");
-//                } else {
-//                    System.out.print(". ");
-//                }
-//            }
-//            System.out.println();
-//        }
-//
-//        System.out.println("-----------");
     }
 
     @Override

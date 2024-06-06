@@ -20,12 +20,12 @@ Main {
                 }
             }
         });
-        userInputThread.start(); // Start the thread
+        userInputThread.start();
         while (true) {
             gameEngine.iteration();
             gameEngine.view();
             try {
-                Thread.sleep(2000); // Delay for 1.5 seconds
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
