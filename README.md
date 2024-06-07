@@ -21,12 +21,10 @@ In console game implementation use **A** and **D** in console to move left and r
 
 In this game version aliens are static but do not relax ahead. Every enemy shoots each forth second, so you need to humiliate them faster then new aliens appear.
 
-## Player Health:
+### Player Health:
 
 The player has a limited number of lives - **5**.
 Each bullet hit to our ship decrease lives by 1 till we lose all of them
-
-## Requirements
 
 ## Functional Requirements
 #### Game Initialization:
@@ -50,6 +48,12 @@ The game state should be displayed correctly.
 ## Non-Functional Requirements
 #### Performance:
 The game should run smoothly without noticeable lag. The game should respond to player inputs without delay (not counting iteration delay).
+#### Minimal recomended preset:
+OS : Windows 7 or higher.
+CPU : Core 2 Duo.
+RAM: 4 GB DDR3.
+GPU: Intel HD Graphics 4000 or other shader model 4.0.
+
 #### Usability:
 The game controls should be intuitive and easy to use.
 
@@ -57,17 +61,9 @@ The game controls should be intuitive and easy to use.
 The game should run on any system with JDK installed. Reccomended 
 #### Reliability:
 The game should handle invalid inputs gracefully. The game should not crash during normal operation.
-
-
-
-
-
-
-
 To run the Space Invaders Java game, you need:
 
 Java Development Kit (JDK):
-
 Ensure you have JDK installed on your system. You can download it from Oracle's website.
 IDE (Integrated Development Environment):
 
