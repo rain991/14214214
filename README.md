@@ -1,5 +1,5 @@
 
-# Space Invaders Java Game
+# Space Invaders Java Game. Author : Savenko Ivan
 
 Welcome to the documentation for the Space Invaders Java game! This document provides an overview of the game, its rules, requirements, and instructions for running and playing it.
 
@@ -27,6 +27,43 @@ The player has a limited number of lives - **5**.
 Each bullet hit to our ship decrease lives by 1 till we lose all of them
 
 ## Requirements
+
+## Functional Requirements
+#### Game Initialization:
+The game should initialize correctly with the player having 5 lives.
+Aliens should be placed in their starting positions.
+#### Player Controls:
+The player should be able to move left by function implemented from GameEngine.
+The player should be able to move right uby function implemented from GameEngine.
+#### Alien Behavior:
+Aliens should shoot bullets every four seconds.
+Aliens should be eliminated when hit by the player's bullets.
+#### Collision Detection:
+The game should detect collisions between the player's bullets and aliens.
+The game should detect collisions between aliens' bullets and the player's ship.
+#### Player Health:
+The player's health should decrease by 1 for each bullet hit.
+The game should end when the player's health reaches 0.
+#### Game Display:
+The game state should be displayed correctly.
+
+## Non-Functional Requirements
+#### Performance:
+The game should run smoothly without noticeable lag. The game should respond to player inputs without delay (not counting iteration delay).
+#### Usability:
+The game controls should be intuitive and easy to use.
+
+#### Portability:
+The game should run on any system with JDK installed. Reccomended 
+#### Reliability:
+The game should handle invalid inputs gracefully. The game should not crash during normal operation.
+
+
+
+
+
+
+
 To run the Space Invaders Java game, you need:
 
 Java Development Kit (JDK):
